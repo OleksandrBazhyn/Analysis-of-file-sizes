@@ -6,19 +6,20 @@ try:
     with open("gathered_file_sizes.txt") as f:
         sizes = np.array([int(line.strip()) for line in f if line.strip().isdigit()])
 except FileNotFoundError:
-    print("Файл не знайдено. Переконайтесь, що `file_sizes.txt` існує.")
+    print("Файл не знайдено. Переконайтесь, що `gathered_file_sizes.txt` існує.")
     exit()
 
 # Перевірка, чи є дані
 if sizes.size == 0:
-    print("Файл `file_sizes.txt` порожній або містить некоректні дані.")
+    print("Файл `gathered_file_sizes.txt` порожній або містить некоректні дані.")
     exit()
 
-# Нові діапазони розмірів (краще охоплення, особливо для великих файлів)
-bins = [0, 1024, 10_240, 100_240, 1_024_000, 10_240_000, 100_240_000, 
+# Нові діапазони розмірів (додано "<0.5 KB")
+bins = [0, 512, 1024, 10_240, 100_240, 1_024_000, 10_240_000, 100_240_000, 
         1_024_000_000, 10_240_000_000, float("inf")]
-labels = ["<1 KB", "1 KB - 10 KB", "10 KB - 100 KB", "100 KB - 1 MB", 
-          "1 MB - 10 MB", "10 MB - 100 MB", "100 MB - 1 GB", "1 GB - 10 GB", "10 GB+"]
+labels = ["0 B - 0.5 KB", "0.5 KB - 1 KB", "1 KB - 10 KB", "10 KB - 100 KB", 
+          "100 KB - 1 MB", "1 MB - 10 MB", "10 MB - 100 MB", 
+          "100 MB - 1 GB", "1 GB - 10 GB", "10 GB+"]
 
 # Розподіл файлів по групах
 hist, _ = np.histogram(sizes, bins=bins)
@@ -28,7 +29,7 @@ total_files = sizes.size
 percentages = (hist / total_files) * 100  # Відсоткове співвідношення
 
 # Побудова гістограми
-plt.figure(figsize=(12, 6))
+plt.figure(figsize=(16, 9))
 bars = plt.bar(labels, hist, color="skyblue", edgecolor="black", alpha=0.7)
 
 # Додавання підписів із відсотками та кількістю файлів
