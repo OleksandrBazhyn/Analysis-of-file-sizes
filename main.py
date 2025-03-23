@@ -47,6 +47,8 @@ plt.grid(axis="y", linestyle="--", linewidth=0.5)
 # Відображення графіка
 plt.show()
 
+print()
 # Вивід даних у консоль
 for label, perc, count in zip(labels, percentages, hist):
     print(f"{label}: {perc:.2f}% файлів ({count} шт.)")
+print()
